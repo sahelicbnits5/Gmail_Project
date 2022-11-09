@@ -12,7 +12,8 @@ class ComposePage:
     def __init__(self, driver):
         self.driver = driver
 
-    input_area = (By.CSS_SELECTOR, "div[class='wO nr l1'] textarea")
+    # input_area = (By.CSS_SELECTOR, "div[class='wO nr l1'] textarea")
+    input_area = (By.CSS_SELECTOR, "div[aria-label='To'] input")
     # input_area = (By.CSS_SELECTOR, "div[aria - label='To']")
     max = (By.XPATH, "//td[@class='Hm']/img[@class='Hq aUG']")
     subject = (By.CSS_SELECTOR, "input[class='aoT']")
@@ -23,16 +24,15 @@ class ComposePage:
         return self.driver.find_element(*ComposePage.max).click()
 
     def get_to_input(self):
-        return self.driver.find_element(*ComposePage.input_area).send_keys("saheli.mondal@fedev.cbnits.com")
+        return self.driver.find_element(*ComposePage.input_area)
 
     def get_subject_input(self):
         return self.driver.find_element(*ComposePage.subject).send_keys("Hello")
 
-    def get_body_input(self):
-        return self.driver.find_element(*ComposePage.body).send_keys("Hello world")
+    def get_body_input(self, text):
+        return self.driver.find_element(*ComposePage.body).send_keys(text)
 
     def get_send_btn(self):
-
         self.driver.find_element(*ComposePage.send).click()
 
     def sent_page(self):
