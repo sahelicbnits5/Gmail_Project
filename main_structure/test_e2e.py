@@ -1,10 +1,15 @@
 import time
 
-from selenium.webdriver import Keys, ActionChains
+# import Actions as Actions
+# import org.openqa.selenium.interactions.Actions;
+from selenium.webdriver import ActionChains
+# from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
+from Config.Configuration import Configuration
 from page_Object.ComposePage import ComposePage
 from page_Object.EmailHome import EmailHome
 from page_Object.LoginPage import LoginPage
@@ -15,7 +20,7 @@ from utilities.BaseClass import BaseClass
 
 class TestMain(BaseClass):
 
-    def test_gmail(self, get_username):
+    def test_gmail(self, get_username,get_password):
         mail_page = MailPage(self.driver)
         compose_page = ComposePage(self.driver)
         self.driver.implicitly_wait(10)
@@ -25,7 +30,7 @@ class TestMain(BaseClass):
         self.element_wait_clickable(login_page.get_id_next_btn())
         login_page.get_id_next_btn().click()
         time.sleep(5)
-        login_page.get_pass_input().send_keys("cbnits@1234")
+        login_page.get_pass_input().send_keys(get_password)
         self.element_wait_clickable(login_page.pass_next_btn)
         homepage = login_page.get_pass_next_btn()
         time.sleep(2)
@@ -37,22 +42,22 @@ class TestMain(BaseClass):
         # breakpoint()
         self.element_wait_presence(email_page.profile_icon)
         email_page.get_profile_icon()
-        #breakpoint()
+        # breakpoint()
         self.driver.switch_to.frame('account')
         time.sleep(3)
         self.element_wait_presence(EmailHome.name)
         time.sleep(2)
-        assert email_page.get_profile_name().text == "Saheli Saheli"
+        assert email_page.get_profile_name().text == Configuration.profile_name,"Saheli Saheli"
 
         self.element_wait_presence(email_page.emailid)
-        assert email_page.get_profile_id().text == "saheli.mondal@fedev.cbnits.com"
+        assert email_page.get_profile_id().text == Configuration.profile_email_id,"saheli.mondal@fedev.cbnits.com"
 
         self.driver.switch_to.default_content()
         self.element_wait_clickable(email_page.compose_block)
         email_page.get_compose_block()
         compose_page = email_page.compose_page()
         # time.sleep(12)
-        #breakpoint()
+        # breakpoint()
         self.element_wait_presence(ComposePage.max)
         compose_page.get_max()
 
@@ -71,9 +76,9 @@ class TestMain(BaseClass):
         time.sleep(5)
 
         self.send_multiple_text_to_main("HELLO WORLD")
-        #self.element_wait_presence(ComposePage.body)
-        #for i in range(0, 50):
-            #compose_page.get_body_input()
+        # self.element_wait_presence(ComposePage.body)
+        # for i in range(0, 50):
+        # compose_page.get_body_input()
 
         self.element_wait_clickable(ComposePage.send)
         compose_page.get_send_btn()
@@ -116,6 +121,12 @@ class TestMain(BaseClass):
 
         self.element_wait_clickable(MailPage.discard_btn)
         mailpage.get_discard_btn().click()
+        self.element_wait_clickable(SentPage.inbox_btn)
+        sent_page.get_inbox_btn().click()
+        # self.driver.find_element(By.XPATH, "//div[@id=':1l']").click()
+        # time.sleep(2)
+        # delemail = self.driver.find_element(By.CSS_SELECTOR, "")
+        # delemail.click()
 
         self.element_wait_clickable(EmailHome.profile_icon)
         email_page.get_profile_icon()
@@ -132,7 +143,7 @@ class TestMain(BaseClass):
 
         assert sign_in_text == 'Sign in'
 
-    def send_multiple_text_to_main(self,text):
+    def send_multiple_text_to_main(self, text):
         self.element_wait_presence(ComposePage.body)
         compose_page = ComposePage(self.driver)
         for i in range(0, 50):

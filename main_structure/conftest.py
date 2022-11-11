@@ -12,9 +12,15 @@ def pytest_addoption(parser):
         "--username", action="store", default="saheli.mondal@fedev.cbnits.com"
     )
 
+    parser.addoption(
+        "--pass", action="store", default="cbnits@1234"
+    )
+
 
 @pytest.fixture(scope="class")
 def setup(request):
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--ignore-certificate-error')
     browser_name = request.config.getoption("browser_name")
     if browser_name == "chrome":
         service_obj = Service(r"C:\Users\Saheli Mondal\Downloads\chromedriver_win32 (2)\chromedriver.exe")
@@ -38,3 +44,9 @@ def get_username(request):
     username = request.config.getoption("username")
     print(get_username)
     return username
+
+@pytest.fixture(scope="class")
+def get_password(request):
+    password = request.config.getoption("pass")
+    print(get_password)
+    return password
